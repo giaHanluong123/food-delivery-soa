@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Detail</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('shipper-order-detail')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Shipper Portal</h1>
+            <div class="nav-links">
+                <a href="./assigned-orders.html">Assigned Orders</a>
+                <a href="./tracking-update.html">Update Location</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Chi tiết đơn giao hàng</h2>
+        <p class="page-desc">Màn này dùng để xem chi tiết đơn và cập nhật trạng thái giao vận.</p>
+
+        <div class="card">
+            <p><strong>Mã đơn:</strong> ORD001</p>
+            <p><strong>Nhà hàng:</strong> Nhà hàng A</p>
+            <p><strong>Khách hàng:</strong> Nguyễn Văn A</p>
+            <p><strong>Điểm giao:</strong> 123 Nguyễn Văn Cừ, Quận 5</p>
+            <p><strong>Trạng thái hiện tại:</strong> Assigned</p>
+        </div>
+
+        <div class="card">
+            <button class="btn">Đang đến quán</button>
+            <button class="btn">Đã lấy hàng</button>
+            <button class="btn">Đang giao</button>
+            <button class="btn">Đã giao</button>
+        </div>
+    </div>
+
+    <div class="footer">Shipper Order Detail Page</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Menus</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('admin-menus')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Admin Portal</h1>
+            <div class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./restaurants.html">Restaurants</a>
+                <a href="./orders.html">Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Quản lý menu</h2>
+        <p class="page-desc">Màn này dành cho CRUD món ăn và topping.</p>
+
+        <div class="card">
+            <button class="btn">Thêm món ăn mới</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên món</th>
+                    <th>Giá</th>
+                    <th>Nhà hàng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Cơm gà sốt cay</td>
+                    <td>45.000</td>
+                    <td>Nhà hàng A</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Bún bò đặc biệt</td>
+                    <td>50.000</td>
+                    <td>Nhà hàng A</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">Admin Menus Page</div>
+</body>
+</html>

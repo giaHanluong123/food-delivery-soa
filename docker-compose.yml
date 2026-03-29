@@ -1,0 +1,61 @@
+services:
+  integration-service:
+    build:
+      context: ./integration-service
+    container_name: integration-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./integration-service/app:/app/app
+    restart: unless-stopped
+
+  core-service:
+    build:
+      context: ./core-service
+    container_name: core-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./core-service/app:/app/app
+      - ./core-service/data:/app/data
+    restart: unless-stopped
+
+  delivery-service:
+    build:
+      context: ./delivery-service
+    container_name: delivery-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./delivery-service/app:/app/app
+      - ./delivery-service/data:/app/data
+    restart: unless-stopped
+
+  payment-service:
+    build:
+      context: ./payment-service
+    container_name: payment-service
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./payment-service/app:/app/app
+      - ./payment-service/data:/app/data
+    restart: unless-stopped
+
+  notification-service:
+    build:
+      context: ./notification-service
+    container_name: notification-service
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./notification-service/app:/app/app
+      - ./notification-service/data:/app/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

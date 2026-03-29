@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('customer-checkout')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Customer Portal</h1>
+            <div class="nav-links">
+                <a href="./cart.html">Cart</a>
+                <a href="./tracking.html">Tracking</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Checkout / Tạo đơn</h2>
+        <p class="page-desc">Màn này sẽ nhập địa chỉ giao hàng, phương thức thanh toán và tạo đơn.</p>
+
+        <div class="card">
+            <div class="form-group">
+                <label>Địa chỉ giao hàng</label>
+                <input type="text" placeholder="123 Nguyễn Văn Cừ, Quận 5, TP.HCM">
+            </div>
+
+            <div class="form-group">
+                <label>Ghi chú đơn hàng</label>
+                <textarea placeholder="Ít đá, không hành, giao giờ trưa..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Phương thức thanh toán</label>
+                <select>
+                    <option>COD</option>
+                    <option>Demo Online Payment</option>
+                </select>
+            </div>
+
+            <div class="info-box">
+                Tạm tính món: 95.000 VNĐ <br>
+                Phí ship dự kiến: 18.000 VNĐ <br>
+                Tổng cộng: 113.000 VNĐ
+            </div>
+
+            <button class="btn">Tạo đơn hàng</button>
+        </div>
+    </div>
+
+    <div class="footer">Customer Checkout Page</div>
+</body>
+</html>

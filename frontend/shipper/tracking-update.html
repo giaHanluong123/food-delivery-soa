@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Update</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('shipper-tracking-update')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Shipper Portal</h1>
+            <div class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./assigned-orders.html">Assigned Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Cập nhật vị trí giao hàng</h2>
+        <p class="page-desc">Màn này dùng để shipper cập nhật tọa độ hiện tại.</p>
+
+        <div class="card">
+            <div class="form-group">
+                <label>Latitude</label>
+                <input type="text" placeholder="10.762622">
+            </div>
+
+            <div class="form-group">
+                <label>Longitude</label>
+                <input type="text" placeholder="106.660172">
+            </div>
+
+            <button class="btn">Cập nhật vị trí</button>
+        </div>
+    </div>
+
+    <div class="footer">Shipper Tracking Update Page</div>
+</body>
+</html>

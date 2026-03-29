@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Orders</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('shipper-assigned-orders')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Shipper Portal</h1>
+            <div class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./tracking-update.html">Update Location</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Đơn được gán</h2>
+        <p class="page-desc">Màn này hiển thị danh sách đơn hàng shipper được giao.</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Điểm lấy hàng</th>
+                    <th>Điểm giao hàng</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="./order-detail.html">ORD001</a></td>
+                    <td>Nhà hàng A</td>
+                    <td>Quận 5</td>
+                    <td>Assigned</td>
+                </tr>
+                <tr>
+                    <td><a href="./order-detail.html">ORD002</a></td>
+                    <td>Nhà hàng B</td>
+                    <td>Quận 10</td>
+                    <td>Picking Up</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">Shipper Assigned Orders Page</div>
+</body>
+</html>

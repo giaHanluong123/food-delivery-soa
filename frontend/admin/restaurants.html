@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Restaurants</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('admin-restaurants')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Admin Portal</h1>
+            <div class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./menus.html">Menus</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Quản lý nhà hàng</h2>
+        <p class="page-desc">Màn này dành cho CRUD nhà hàng.</p>
+
+        <div class="card">
+            <button class="btn">Thêm nhà hàng mới</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên nhà hàng</th>
+                    <th>Địa chỉ</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Nhà hàng A</td>
+                    <td>Quận 1</td>
+                    <td>Đang hoạt động</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Nhà hàng B</td>
+                    <td>Quận 5</td>
+                    <td>Đang hoạt động</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">Admin Restaurants Page</div>
+</body>
+</html>

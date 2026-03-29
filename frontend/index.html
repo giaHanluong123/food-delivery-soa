@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery SOA Demo</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="container">
+            <h1>Food Delivery SOA Demo</h1>
+            <div class="nav-links">
+                <a href="./customer/login.html">Customer</a>
+                <a href="./admin/login.html">Admin</a>
+                <a href="./shipper/login.html">Shipper</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Trang khởi động hệ thống</h2>
+        <p class="page-desc">
+            Đây là frontend khung cho đồ án hệ thống đặt món và giao hàng theo kiến trúc SOA.
+            Bạn có thể vào từng khu vực riêng cho Customer, Admin và Shipper để demo các flow khác nhau.
+        </p>
+
+        <div class="grid-3">
+            <div class="card">
+                <h3>Customer</h3>
+                <p>Đăng ký, đăng nhập, xem nhà hàng, chọn món, checkout, theo dõi đơn, đánh giá.</p>
+                <a class="btn" href="./customer/login.html">Vào khu Customer</a>
+            </div>
+
+            <div class="card">
+                <h3>Admin</h3>
+                <p>Quản lý nhà hàng, menu, đơn hàng và đánh giá trong hệ thống demo.</p>
+                <a class="btn" href="./admin/login.html">Vào khu Admin</a>
+            </div>
+
+            <div class="card">
+                <h3>Shipper</h3>
+                <p>Xem đơn được gán, nhận đơn, cập nhật trạng thái và vị trí giao hàng.</p>
+                <a class="btn" href="./shipper/login.html">Vào khu Shipper</a>
+            </div>
+        </div>
+
+        <div class="info-box mt-20">
+            Ở bước này, frontend mới là khung giao diện. Sang các bước sau, chúng ta sẽ nối API thật bằng JavaScript fetch.
+        </div>
+    </div>
+
+    <div class="footer">
+        Food Delivery SOA Demo - Step 4 Frontend Skeleton
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/app.js"></script>
+</head>
+<body onload="showDemoMessage('admin-orders')">
+    <div class="navbar">
+        <div class="container">
+            <h1>Admin Portal</h1>
+            <div class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./menus.html">Menus</a>
+                <a href="./reviews.html">Reviews</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Quản lý đơn hàng</h2>
+        <p class="page-desc">Màn này dành cho admin xem danh sách đơn và cập nhật trạng thái nghiệp vụ.</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ORD001</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>113.000</td>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <td>ORD002</td>
+                    <td>Trần Thị B</td>
+                    <td>89.000</td>
+                    <td>Confirmed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">Admin Orders Page</div>
+</body>
+</html>
