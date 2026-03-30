@@ -16,7 +16,7 @@ from app.routers.restaurant_router import router as restaurant_router
 from app.routers.topping_router import router as topping_router
 from app.routers.user_router import router as user_router
 from app.seed.seed_data import seed_core_data
-
+from app.routers.review_router import router as review_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,7 +38,7 @@ app.include_router(restaurant_router)
 app.include_router(menu_item_router)
 app.include_router(topping_router)
 app.include_router(order_router)
-
+app.include_router(review_router)
 
 @app.get("/")
 def root():
