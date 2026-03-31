@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
+import app.routers.orchestration_router as orchestration_router_module
 from app.main import app
-import app.services.orchestration_service as orchestration_module
 
 
 class FakeOrchestrationService:
@@ -28,7 +28,8 @@ class FakeOrchestrationService:
         }
 
 
-orchestration_module.OrchestrationService = FakeOrchestrationService
+# Patch đúng chỗ: patch ngay trong module router
+orchestration_router_module.OrchestrationService = FakeOrchestrationService
 
 client = TestClient(app)
 
@@ -63,6 +64,9 @@ def test_create_order_flow():
     data = response.json()
     assert data["success"] is True
     assert data["data"]["order"]["id"] == 1001
+    assert data["data"]["payment"]["id"] == 501
+    assert data["data"]["delivery"]["id"] == 301
+    assert data["data"]["notification"]["id"] == 1
 
 
 def test_payment_callback_flow():
@@ -80,6 +84,7 @@ def test_payment_callback_flow():
     data = response.json()
     assert data["success"] is True
     assert data["data"]["payment_callback"]["payment_status"] == "paid"
+    assert data["data"]["order_update"]["order_status"] == "confirmed"
 
 
 def test_delivery_delivered_flow():
@@ -94,3 +99,4 @@ def test_delivery_delivered_flow():
     data = response.json()
     assert data["success"] is True
     assert data["data"]["delivery_update"]["delivery_status"] == "delivered"
+    assert data["data"]["order_update"]["order_status"] == "delivered"
