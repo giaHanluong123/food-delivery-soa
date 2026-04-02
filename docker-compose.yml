@@ -5,6 +5,21 @@ services:
     container_name: integration-service
     ports:
       - "8000:8000"
+    environment:
+      - CORE_SERVICE_URL=http://core-service:8001
+      - DELIVERY_SERVICE_URL=http://delivery-service:8002
+      - PAYMENT_SERVICE_URL=http://payment-service:8003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:8004
+      - USE_MOCK_GEOCODING=false
+      - NOMINATIM_BASE_URL=https://nominatim.openstreetmap.org
+      - "NOMINATIM_USER_AGENT=food-delivery-soa-demo/1.0 (student project; contact: luonggiahan2005@gmail.com)"
+      - DEFAULT_GEOCODING_COUNTRY=vn
+      - HTTP_TIMEOUT=10
+    depends_on:
+      - core-service
+      - delivery-service
+      - payment-service
+      - notification-service
     volumes:
       - ./integration-service/app:/app/app
     restart: unless-stopped
@@ -59,4 +74,3 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
-

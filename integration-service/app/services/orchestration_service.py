@@ -14,48 +14,51 @@ class OrchestrationService:
         self.client = ServiceHttpClient()
 
     def create_order_flow(self, payload: dict):
-        created_order = None
-        created_payment = None
-        created_delivery = None
-        created_notification = None
+        # 1) Lấy địa chỉ từ core-service nếu client không truyền delivery_address
+        address_detail = self.client.request(
+            "GET",
+            f"{CORE_SERVICE_URL}/addresses/{payload['address_id']}",
+        )
 
-        items_payload = []
-        subtotal = 0.0
-
-        for item in payload["items"]:
-            item_total = item["unit_price"] * item["quantity"]
-            subtotal += item_total
-
-            items_payload.append(
-                {
-                    "menu_item_id": item["menu_item_id"],
-                    "quantity": item["quantity"],
-                    "unit_price": item["unit_price"],
-                    "note": item.get("note"),
-                    "toppings": item.get("toppings", []),
-                }
+        resolved_delivery_address = payload.get("delivery_address") or ", ".join(
+            filter(
+                None,
+                [
+                    address_detail.get("address_line"),
+                    address_detail.get("ward"),
+                    address_detail.get("district"),
+                    address_detail.get("city"),
+                ],
             )
+        )
 
-        total_amount = subtotal + payload.get("shipping_fee", 0)
-
+        # 2) Tạo order đúng contract của core-service
         core_order_payload = {
             "user_id": payload["user_id"],
             "restaurant_id": payload["restaurant_id"],
-            "delivery_address": payload["delivery_address"],
+            "address_id": payload["address_id"],
             "note": payload.get("note"),
             "shipping_fee": payload.get("shipping_fee", 0),
-            "total_amount": total_amount,
-            "items": items_payload,
+            "items": [
+                {
+                    "menu_item_id": item["menu_item_id"],
+                    "quantity": item["quantity"],
+                    "toppings": item.get("toppings", []),
+                }
+                for item in payload["items"]
+            ],
         }
 
         created_order = self.client.request(
             "POST",
-            f"{CORE_SERVICE_URL}/orders/full",
+            f"{CORE_SERVICE_URL}/orders/create-full",
             json=core_order_payload,
         )
 
         order_id = created_order["id"]
+        total_amount = created_order["total_amount"]
 
+        # 3) Tạo payment
         payment_payload = {
             "order_id": order_id,
             "user_id": payload["user_id"],
@@ -69,12 +72,13 @@ class OrchestrationService:
             json=payment_payload,
         )
 
+        # 4) Tạo delivery
         delivery_payload = {
             "order_id": order_id,
             "user_id": payload["user_id"],
             "restaurant_id": payload["restaurant_id"],
             "pickup_address": f"Restaurant #{payload['restaurant_id']}",
-            "dropoff_address": payload["delivery_address"],
+            "dropoff_address": resolved_delivery_address,
             "shipping_fee": payload.get("shipping_fee", 0),
             "note": payload.get("note"),
         }
@@ -85,6 +89,7 @@ class OrchestrationService:
             json=delivery_payload,
         )
 
+        # 5) Tạo notification
         notification_payload = {
             "user_id": payload["user_id"],
             "notification_type": "order_created",
@@ -118,6 +123,11 @@ class OrchestrationService:
             },
         )
 
+        order_detail = self.client.request(
+            "GET",
+            f"{CORE_SERVICE_URL}/orders/{payload['order_id']}",
+        )
+
         order_update_result = None
         notification_result = None
 
@@ -125,7 +135,11 @@ class OrchestrationService:
             order_update_result = self.client.request(
                 "PUT",
                 f"{CORE_SERVICE_URL}/orders/{payload['order_id']}/status",
-                json={"order_status": "confirmed"},
+                json={
+                    "order_status": "confirmed",
+                    "payment_status": "paid",
+                    "delivery_status": order_detail["delivery_status"],
+                },
             )
 
             notification_result = self.client.request(
@@ -142,6 +156,16 @@ class OrchestrationService:
             )
 
         elif payload["payment_status"] == "failed":
+            order_update_result = self.client.request(
+                "PUT",
+                f"{CORE_SERVICE_URL}/orders/{payload['order_id']}/status",
+                json={
+                    "order_status": order_detail["order_status"],
+                    "payment_status": "failed",
+                    "delivery_status": order_detail["delivery_status"],
+                },
+            )
+
             notification_result = self.client.request(
                 "POST",
                 f"{NOTIFICATION_SERVICE_URL}/notifications",
@@ -154,7 +178,6 @@ class OrchestrationService:
                     "reference_id": payload["payment_id"],
                 },
             )
-
         else:
             raise HTTPException(
                 status_code=400,
@@ -174,10 +197,19 @@ class OrchestrationService:
             json={"delivery_status": "delivered"},
         )
 
+        order_detail = self.client.request(
+            "GET",
+            f"{CORE_SERVICE_URL}/orders/{payload['order_id']}",
+        )
+
         order_update_result = self.client.request(
             "PUT",
             f"{CORE_SERVICE_URL}/orders/{payload['order_id']}/status",
-            json={"order_status": "delivered"},
+            json={
+                "order_status": "delivered",
+                "payment_status": order_detail["payment_status"],
+                "delivery_status": "delivered",
+            },
         )
 
         notification_result = self.client.request(
