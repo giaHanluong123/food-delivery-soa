@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Realtime Order Test</title>
+</head>
+<body>
+  <h1>Realtime Order Test</h1>
+
+  <button id="connectBtn">Connect order 101</button>
+  <button id="pingBtn">Send ping</button>
+
+  <pre id="log"></pre>
+
+  <script>
+    let socket = null;
+    const log = document.getElementById("log");
+
+    function append(message) {
+      log.textContent += message + "\n";
+    }
+
+    document.getElementById("connectBtn").onclick = () => {
+      socket = new WebSocket("ws://localhost:8000/realtime/ws/orders/101");
+
+      socket.onopen = () => append("WS connected");
+      socket.onmessage = (event) => append("Message: " + event.data);
+      socket.onclose = () => append("WS closed");
+      socket.onerror = () => append("WS error");
+    };
+
+    document.getElementById("pingBtn").onclick = () => {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send("ping");
+        append("Ping sent");
+      } else {
+        append("Socket chưa connect");
+      }
+    };
+  </script>
+</body>
+</html>

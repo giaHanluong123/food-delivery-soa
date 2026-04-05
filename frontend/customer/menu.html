@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/app.js"></script>
+    <script src="./js/customer-flow.js" defer></script>
 </head>
-<body onload="showDemoMessage('customer-menu')">
+<body data-page="customer-menu" onload="showDemoMessage('customer-menu')">
     <div class="navbar">
         <div class="container">
             <h1>Customer Portal</h1>
             <div class="nav-links">
                 <a href="./restaurants.html">Restaurants</a>
-                <a href="./cart.html">Cart</a>
+                <a href="./cart.html">Cart (<span data-cart-count>0</span>)</a>
                 <a href="./checkout.html">Checkout</a>
             </div>
         </div>
@@ -21,33 +22,13 @@
 
     <div class="container">
         <h2 class="page-title">Menu nhà hàng</h2>
-        <p class="page-desc">Màn này sẽ hiển thị món ăn, topping và giá.</p>
+        <p class="page-desc">
+            Trang này đọc <strong>restaurant_id</strong> từ URL rồi load menu thật từ core-service.
+        </p>
 
-        <div class="grid-2">
-            <div class="card">
-                <h3>Cơm gà sốt cay</h3>
-                <p>Giá: 45.000 VNĐ</p>
-                <button class="btn">Thêm vào giỏ</button>
-            </div>
-
-            <div class="card">
-                <h3>Bún bò đặc biệt</h3>
-                <p>Giá: 50.000 VNĐ</p>
-                <button class="btn">Thêm vào giỏ</button>
-            </div>
-
-            <div class="card">
-                <h3>Trà đào</h3>
-                <p>Giá: 25.000 VNĐ</p>
-                <button class="btn">Thêm vào giỏ</button>
-            </div>
-
-            <div class="card">
-                <h3>Khoai tây chiên</h3>
-                <p>Giá: 30.000 VNĐ</p>
-                <button class="btn">Thêm vào giỏ</button>
-            </div>
-        </div>
+        <div id="restaurantInfo"></div>
+        <div id="menuState" class="info-box">Đang khởi tạo...</div>
+        <div id="menuList" class="grid-2"></div>
     </div>
 
     <div class="footer">Customer Menu Page</div>

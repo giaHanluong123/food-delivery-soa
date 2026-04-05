@@ -10,6 +10,7 @@ from app.schemas.notification import (
     NotificationResponse,
 )
 from app.services.notification_service import NotificationService
+from app.services.realtime_publisher import publish_notification_event
 
 router = APIRouter(prefix="/notifications", tags=["Notifications"])
 
@@ -25,7 +26,7 @@ def get_db():
 @router.post("", response_model=NotificationResponse)
 def create_notification(payload: CreateNotificationRequest, db: Session = Depends(get_db)):
     service = NotificationService(db)
-    return service.create_notification(
+    notification = service.create_notification(
         user_id=payload.user_id,
         notification_type=payload.notification_type,
         title=payload.title,
@@ -33,6 +34,21 @@ def create_notification(payload: CreateNotificationRequest, db: Session = Depend
         reference_type=payload.reference_type,
         reference_id=payload.reference_id,
     )
+
+    publish_notification_event(
+        event_type="notification_created",
+        notification_id=notification.id,
+        user_id=notification.user_id,
+        notification_type=notification.notification_type,
+        title=notification.title,
+        message=notification.message,
+        is_read=notification.is_read,
+        reference_type=notification.reference_type,
+        reference_id=notification.reference_id,
+        order_id=payload.order_id,
+    )
+
+    return notification
 
 
 @router.get("", response_model=List[NotificationResponse])
@@ -61,6 +77,20 @@ def get_notifications_by_user(
 def mark_notification_as_read(notification_id: int, db: Session = Depends(get_db)):
     service = NotificationService(db)
     notification = service.mark_as_read(notification_id)
+
+    publish_notification_event(
+        event_type="notification_read",
+        notification_id=notification.id,
+        user_id=notification.user_id,
+        notification_type=notification.notification_type,
+        title=notification.title,
+        message=notification.message,
+        is_read=notification.is_read,
+        reference_type=notification.reference_type,
+        reference_id=notification.reference_id,
+        order_id=notification.reference_id if notification.reference_type == "order" else None,
+    )
+
     return {
         "id": notification.id,
         "is_read": notification.is_read,

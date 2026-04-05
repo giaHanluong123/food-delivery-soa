@@ -1,54 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/app.js"></script>
+    <script src="./js/customer-flow.js" defer></script>
 </head>
-<body onload="showDemoMessage('customer-checkout')">
+<body data-page="customer-checkout" onload="showDemoMessage('customer-checkout')">
     <div class="navbar">
         <div class="container">
             <h1>Customer Portal</h1>
             <div class="nav-links">
-                <a href="./cart.html">Cart</a>
+                <a href="./restaurants.html">Restaurants</a>
+                <a href="./cart.html">Cart (<span data-cart-count>0</span>)</a>
                 <a href="./tracking.html">Tracking</a>
+                <a href="./order-demo.html">Order Demo</a>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <h2 class="page-title">Checkout / Tạo đơn</h2>
-        <p class="page-desc">Màn này sẽ nhập địa chỉ giao hàng, phương thức thanh toán và tạo đơn.</p>
+        <h2 class="page-title">Checkout</h2>
+        <p class="page-desc">
+            Trang này lấy dữ liệu thật từ giỏ hàng hiện tại, cho phép nhập thông tin giao hàng và gọi create-order qua integration-service.
+        </p>
+
+        <div id="checkoutState" class="info-box">Đang khởi tạo checkout...</div>
+
+        <div id="checkoutCartInfo"></div>
 
         <div class="card">
+            <h3>Thông tin khách hàng</h3>
+
             <div class="form-group">
-                <label>Địa chỉ giao hàng</label>
-                <input type="text" placeholder="123 Nguyễn Văn Cừ, Quận 5, TP.HCM">
+                <label for="userIdInput">User ID</label>
+                <input id="userIdInput" type="number" min="1" value="1">
             </div>
 
             <div class="form-group">
-                <label>Ghi chú đơn hàng</label>
-                <textarea placeholder="Ít đá, không hành, giao giờ trưa..."></textarea>
+                <label for="customerNameInput">Tên người nhận</label>
+                <input id="customerNameInput" type="text" placeholder="Ví dụ: Nguyễn Văn A">
             </div>
 
             <div class="form-group">
-                <label>Phương thức thanh toán</label>
-                <select>
-                    <option>COD</option>
-                    <option>Demo Online Payment</option>
+                <label for="customerPhoneInput">Số điện thoại</label>
+                <input id="customerPhoneInput" type="text" placeholder="Ví dụ: 0901234567">
+            </div>
+
+            <div class="form-group">
+                <label for="addressLineInput">Địa chỉ giao hàng</label>
+                <input id="addressLineInput" type="text" placeholder="Ví dụ: 123 Lý Thường Kiệt">
+            </div>
+
+            <div class="form-group">
+                <label for="wardInput">Phường/Xã</label>
+                <input id="wardInput" type="text" placeholder="Ví dụ: Phường 15">
+            </div>
+
+            <div class="form-group">
+                <label for="districtInput">Quận/Huyện</label>
+                <input id="districtInput" type="text" placeholder="Ví dụ: Quận 10">
+            </div>
+
+            <div class="form-group">
+                <label for="cityInput">Tỉnh/Thành phố</label>
+                <input id="cityInput" type="text" value="TP.HCM">
+            </div>
+
+            <div class="form-group">
+                <label for="noteInput">Ghi chú đơn hàng</label>
+                <textarea id="noteInput" rows="4" placeholder="Ví dụ: giao giờ trưa, không cay..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentMethodInput">Phương thức thanh toán</label>
+                <select id="paymentMethodInput">
+                    <option value="cod">COD</option>
+                    <option value="mock_gateway">Mock Gateway</option>
                 </select>
             </div>
 
-            <div class="info-box">
-                Tạm tính món: 95.000 VNĐ <br>
-                Phí ship dự kiến: 18.000 VNĐ <br>
-                Tổng cộng: 113.000 VNĐ
-            </div>
-
-            <button class="btn">Tạo đơn hàng</button>
+            <button id="placeOrderBtn" type="button" class="btn">Tạo đơn hàng</button>
+            <a class="btn btn-secondary" href="./cart.html">Quay lại giỏ hàng</a>
         </div>
+
+        <div id="checkoutSummary" class="card"></div>
+        <div id="checkoutResult" class="card"></div>
     </div>
 
     <div class="footer">Customer Checkout Page</div>

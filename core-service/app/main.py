@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect, text
 
 from app.core.config import DATABASE_URL, DB_FILE
@@ -18,6 +19,7 @@ from app.routers.user_router import router as user_router
 from app.seed.seed_data import seed_core_data
 from app.routers.review_router import router as review_router
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
@@ -31,6 +33,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(address_router)
@@ -39,6 +49,7 @@ app.include_router(menu_item_router)
 app.include_router(topping_router)
 app.include_router(order_router)
 app.include_router(review_router)
+
 
 @app.get("/")
 def root():

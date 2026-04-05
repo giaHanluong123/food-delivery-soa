@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/app.js"></script>
+    <script src="./js/customer-flow.js" defer></script>
 </head>
-<body onload="showDemoMessage('customer-cart')">
+<body data-page="customer-cart" onload="showDemoMessage('customer-cart')">
     <div class="navbar">
         <div class="container">
             <h1>Customer Portal</h1>
@@ -21,16 +22,18 @@
 
     <div class="container">
         <h2 class="page-title">Giỏ hàng</h2>
-        <p class="page-desc">Màn này sẽ hiển thị các món đã chọn trước khi thanh toán.</p>
+        <p class="page-desc">
+            Giỏ hàng đang được lưu bằng <strong>localStorage</strong> để phù hợp đồ án demo, dễ kiểm thử và chưa cần backend cart riêng.
+        </p>
+
+        <div id="cartInfo"></div>
 
         <div class="card">
-            <ul class="list">
-                <li>Cơm gà sốt cay x 1 - 45.000 VNĐ</li>
-                <li>Trà đào x 2 - 50.000 VNĐ</li>
-            </ul>
-            <h3 class="mt-20">Tạm tính: 95.000 VNĐ</h3>
-            <a class="btn" href="./checkout.html">Tiến hành checkout</a>
+            <ul id="cartList" class="list"></ul>
+            <button id="clearCartBtn" class="btn btn-secondary">Xóa toàn bộ giỏ hàng</button>
         </div>
+
+        <div id="cartSummary" class="card"></div>
     </div>
 
     <div class="footer">Customer Cart Page</div>

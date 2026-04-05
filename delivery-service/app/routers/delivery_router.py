@@ -17,7 +17,7 @@ from app.schemas.delivery import (
     TrackingUpdateRequest,
 )
 from app.services.redis_client import get_redis_client
-
+from app.services.realtime_publisher import publish_delivery_status_event
 router = APIRouter(tags=["Delivery"])
 
 TRACKING_TTL_SECONDS = 60 * 60 * 24  # 24 giờ
@@ -174,8 +174,19 @@ def assign_delivery(
 
     db.commit()
     db.refresh(delivery)
-    return delivery
 
+    publish_delivery_status_event(
+        order_id=delivery.order_id,
+        delivery_id=delivery.id,
+        user_id=delivery.user_id,
+        restaurant_id=delivery.restaurant_id,
+        shipper_id=delivery.shipper_id,
+        delivery_status=delivery.delivery_status,
+        event_type="delivery_assigned",
+        message=f"Đơn giao #{delivery.id} đã được gán cho shipper #{delivery.shipper_id}",
+    )
+
+    return delivery
 
 @router.put("/deliveries/{delivery_id}/status", response_model=DeliveryResponse)
 def update_delivery_status(
@@ -209,8 +220,19 @@ def update_delivery_status(
     delivery.delivery_status = next_status
     db.commit()
     db.refresh(delivery)
-    return delivery
 
+    publish_delivery_status_event(
+        order_id=delivery.order_id,
+        delivery_id=delivery.id,
+        user_id=delivery.user_id,
+        restaurant_id=delivery.restaurant_id,
+        shipper_id=delivery.shipper_id,
+        delivery_status=delivery.delivery_status,
+        event_type=f"delivery_{next_status}",
+        message=f"Đơn giao #{delivery.id} đã chuyển sang trạng thái {delivery.delivery_status}",
+    )
+
+    return delivery
 
 @router.post("/tracking/update", response_model=TrackingResponse)
 def update_tracking(payload: TrackingUpdateRequest, db: Session = Depends(get_db)):

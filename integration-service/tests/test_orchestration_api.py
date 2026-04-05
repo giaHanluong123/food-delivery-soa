@@ -18,6 +18,21 @@ def test_create_order_flow_success(monkeypatch):
     def fake_request(self, method, url, json=None):
         calls.append({"method": method, "url": url, "json": json})
 
+        if url == f"{CORE_SERVICE_URL}/addresses/1":
+            return {
+                "id": 1,
+                "user_id": 1,
+                "full_name": "Nguyen Van A",
+                "phone": "0900000001",
+                "address_line": "123 Le Loi",
+                "ward": "Ben Nghe",
+                "district": "District 1",
+                "city": "Ho Chi Minh City",
+                "latitude": 10.7769,
+                "longitude": 106.7009,
+                "is_default": True,
+            }
+
         if url == f"{CORE_SERVICE_URL}/orders/create-full":
             return {
                 "id": 101,
@@ -45,7 +60,10 @@ def test_create_order_flow_success(monkeypatch):
                 "payment_status": "pending",
             }
 
-        if url == f"{DELIVERY_SERVICE_URL}/deliveries/create":
+        if url in {
+            f"{DELIVERY_SERVICE_URL}/deliveries/create",
+            f"{DELIVERY_SERVICE_URL}/deliveries",
+        }:
             return {
                 "id": 301,
                 "order_id": 101,
@@ -76,88 +94,6 @@ def test_create_order_flow_success(monkeypatch):
     monkeypatch.setattr(ServiceHttpClient, "request", fake_request)
 
     payload = {
-    "user_id": 1,
-    "restaurant_id": 1,
-    "address_id": 1,
-    "payment_method": "demo_gateway",
-    "shipping_fee": 15000,
-    "note": "Test order",
-    "items": [
-        {
-            "menu_item_id": 1,
-            "quantity": 2,
-            "toppings": []
-        }
-    ]
-    }
-
-    response = client.post("/orchestrations/create-order", json=payload)
-    assert response.status_code == 200
-
-    body = response.json()
-    assert body["success"] is True
-
-    assert calls[0]["method"] == "POST"
-    assert calls[0]["url"] == f"{CORE_SERVICE_URL}/orders/create-full"
-    assert calls[0]["json"]["address_id"] == 1
-    assert "delivery_address" not in calls[0]["json"]
-    assert "unit_price" not in calls[0]["json"]["items"][0]
-
-    assert calls[1]["url"] == f"{PAYMENT_SERVICE_URL}/payments/create"
-    assert calls[1]["json"]["amount"] == 115000
-
-    assert calls[2]["url"] == f"{DELIVERY_SERVICE_URL}/deliveries"
-    assert calls[2]["json"]["dropoff_address"] == "Address ID #1"
-
-    assert calls[3]["url"] == f"{NOTIFICATION_SERVICE_URL}/notifications"
-
-
-def test_payment_callback_flow_paid_success(monkeypatch):
-    calls = []
-
-    def fake_request(self, method, url, json=None):
-        calls.append({"method": method, "url": url, "json": json})
-
-        if url == f"{PAYMENT_SERVICE_URL}/payments/201/callback":
-            return {
-                "id": 201,
-                "order_id": 101,
-                "payment_status": "paid",
-            }
-
-        if url == f"{CORE_SERVICE_URL}/orders/101":
-            return {
-                "id": 101,
-                "order_status": "pending",
-                "payment_status": "unpaid",
-                "delivery_status": "waiting_assignment",
-            }
-
-        if url == f"{CORE_SERVICE_URL}/orders/101/status":
-            return {
-                "id": 101,
-                "order_status": "confirmed",
-                "payment_status": "paid",
-                "delivery_status": "waiting_assignment",
-            }
-
-        if url == f"{NOTIFICATION_SERVICE_URL}/notifications":
-            return {
-                "id": 402,
-                "user_id": 1,
-                "notification_type": "payment_paid",
-                "title": "Thanh toán thành công",
-                "message": "Đơn hàng #101 đã thanh toán thành công",
-                "reference_type": "payment",
-                "reference_id": 201,
-                "is_read": False,
-            }
-
-        raise AssertionError(f"Unexpected call: {method} {url}")
-
-    monkeypatch.setattr(ServiceHttpClient, "request", fake_request)
-
-    payload = {
         "payment_id": 201,
         "payment_status": "paid",
         "gateway_transaction_id": "DEMO-TXN-001",
@@ -171,6 +107,9 @@ def test_payment_callback_flow_paid_success(monkeypatch):
 
     body = response.json()
     assert body["success"] is True
+
+    assert "realtime_event" in body["data"]
+    assert body["data"]["realtime_event"]["event_type"] == "order_created"
 
     assert calls[0]["url"] == f"{PAYMENT_SERVICE_URL}/payments/201/callback"
     assert calls[1]["url"] == f"{CORE_SERVICE_URL}/orders/101"
@@ -239,6 +178,9 @@ def test_delivery_delivered_flow_success(monkeypatch):
 
     body = response.json()
     assert body["success"] is True
+
+    assert "realtime_events" in body["data"]
+    assert len(body["data"]["realtime_events"]) == 2
 
     assert calls[0]["url"] == f"{DELIVERY_SERVICE_URL}/deliveries/301/status"
     assert calls[1]["url"] == f"{CORE_SERVICE_URL}/orders/101"

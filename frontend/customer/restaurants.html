@@ -1,57 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurants</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/app.js"></script>
+    <script src="./js/customer-flow.js" defer></script>
 </head>
-<body onload="showDemoMessage('customer-restaurants')">
+<body data-page="customer-restaurants" onload="showDemoMessage('customer-restaurants')">
     <div class="navbar">
         <div class="container">
             <h1>Customer Portal</h1>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="./login.html">Login</a>
-                <a href="./menu.html">Menu</a>
-                <a href="./cart.html">Cart</a>
+                <a href="./cart.html">Cart (<span data-cart-count>0</span>)</a>
+                <a href="./order-demo.html">Order Demo</a>
             </div>
         </div>
     </div>
 
     <div class="container">
         <h2 class="page-title">Danh sách nhà hàng</h2>
-        <p class="page-desc">Màn này sẽ hiển thị danh sách nhà hàng cho khách chọn.</p>
+        <p class="page-desc">
+            Khách hàng chọn nhà hàng trước khi vào menu. Dữ liệu lấy thật từ core-service.
+        </p>
 
-        <div class="grid-3">
-            <div class="card">
-                <h3>Nhà hàng A</h3>
-                <p>Món Việt - Giao nhanh</p>
-                <span class="badge">4.7 sao</span>
-                <span class="badge">20 phút</span>
-                <br>
-                <a class="btn" href="./menu.html">Xem menu</a>
+        <div class="card">
+            <div class="form-group">
+                <label for="keywordInput">Tìm nhà hàng theo tên</label>
+                <input id="keywordInput" type="text" placeholder="Ví dụ: com ga">
             </div>
-
-            <div class="card">
-                <h3>Nhà hàng B</h3>
-                <p>Đồ ăn nhanh - Combo sinh viên</p>
-                <span class="badge">4.5 sao</span>
-                <span class="badge">25 phút</span>
-                <br>
-                <a class="btn" href="./menu.html">Xem menu</a>
-            </div>
-
-            <div class="card">
-                <h3>Nhà hàng C</h3>
-                <p>Trà sữa - Ăn vặt</p>
-                <span class="badge">4.8 sao</span>
-                <span class="badge">15 phút</span>
-                <br>
-                <a class="btn" href="./menu.html">Xem menu</a>
-            </div>
+            <button id="searchBtn" class="btn">Tìm kiếm</button>
         </div>
+
+        <div id="restaurantState" class="info-box">Đang khởi tạo...</div>
+        <div id="restaurantList" class="grid-3"></div>
     </div>
 
     <div class="footer">Customer Restaurants Page</div>

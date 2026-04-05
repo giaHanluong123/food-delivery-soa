@@ -19,6 +19,9 @@ class CreateNotificationRequest(BaseModel):
     reference_type: Optional[str] = Field(default=None, max_length=50)
     reference_id: Optional[int] = Field(default=None, gt=0)
 
+    # Chỉ phục vụ realtime routing, không persist xuống DB
+    order_id: Optional[int] = Field(default=None, gt=0)
+
 
 class NotificationResponse(BaseModel):
     id: int

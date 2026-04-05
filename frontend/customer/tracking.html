@@ -1,36 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracking</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/app.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theo dõi đơn hàng - Customer</title>
+  <link rel="stylesheet" href="./css/tracking.css" />
 </head>
-<body onload="showDemoMessage('customer-tracking')">
-    <div class="navbar">
-        <div class="container">
-            <h1>Customer Portal</h1>
-            <div class="nav-links">
-                <a href="./restaurants.html">Restaurants</a>
-                <a href="./review.html">Review</a>
-            </div>
+<body>
+  <div class="container">
+    <header class="page-header">
+      <h1>Theo dõi đơn hàng realtime</h1>
+      <p>Customer có thể theo dõi trạng thái đơn hàng theo thời gian thực.</p>
+    </header>
+
+    <section class="card control-card">
+      <div class="form-row">
+        <label for="orderIdInput">Mã order_id</label>
+        <input id="orderIdInput" type="number" placeholder="Ví dụ: 101" />
+      </div>
+
+      <div class="button-group">
+        <button id="connectBtn">Kết nối realtime</button>
+        <button id="disconnectBtn" class="secondary">Ngắt kết nối</button>
+        <button id="clearLogBtn" class="secondary">Xóa log</button>
+      </div>
+
+      <div class="button-group">
+        <button id="paymentPaidBtn">Thanh toán thành công</button>
+        <button id="paymentFailedBtn" class="secondary">Thanh toán thất bại</button>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <span class="label">Trạng thái kết nối</span>
+          <span id="connectionStatus" class="badge neutral">Chưa kết nối</span>
         </div>
-    </div>
 
-    <div class="container">
-        <h2 class="page-title">Theo dõi đơn hàng</h2>
-        <p class="page-desc">Màn này sẽ hiển thị trạng thái đơn và vị trí shipper ở mức demo.</p>
-
-        <div class="card">
-            <p><strong>Mã đơn:</strong> ORD001</p>
-            <p><strong>Trạng thái:</strong> Đang giao</p>
-            <p><strong>Shipper:</strong> Nguyễn Văn Shipper</p>
-            <p><strong>Vị trí hiện tại:</strong> 10.762622, 106.660172</p>
-            <p><strong>ETA:</strong> 12 phút</p>
+        <div class="info-box">
+          <span class="label">Order hiện tại</span>
+          <span id="currentOrderId">-</span>
         </div>
-    </div>
 
-    <div class="footer">Customer Tracking Page</div>
+        <div class="info-box">
+          <span class="label">Payment hiện tại</span>
+          <span id="currentPaymentId">-</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">User hiện tại</span>
+          <span id="currentUserId">-</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">Trạng thái đơn hiện tại</span>
+          <span id="currentOrderStatus" class="status-text">-</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">Sự kiện gần nhất</span>
+          <span id="lastEventType">-</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Tiến trình đơn hàng</h2>
+      <ul id="timelineList" class="timeline-list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Log realtime</h2>
+      <div id="eventLog" class="event-log"></div>
+    </section>
+  </div>
+
+  <script src="./js/realtime-tracking.js"></script>
 </body>
 </html>
